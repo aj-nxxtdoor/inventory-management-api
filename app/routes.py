@@ -51,3 +51,12 @@ def update_item(item_id):
 
     db.session.commit()
     return jsonify(item.to_dict()), 200
+@main.route('/items/<int:item_id>', methods=['DELETE'])
+def delete_item(item_id):
+    item = Item.query.get(item_id)
+    if not item:
+        return jsonify({'error': 'Item not found'}), 404
+
+    db.session.delete(item)
+    db.session.commit()
+    return jsonify({'message': f'Item {item_id} deleted'}), 200
