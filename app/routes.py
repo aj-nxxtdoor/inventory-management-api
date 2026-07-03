@@ -30,3 +30,24 @@ def create_item():
     db.session.commit()
 
     return jsonify(new_item.to_dict()), 201
+@main.route('/items/<int:item_id>', methods=['PATCH'])
+def update_item(item_id):
+    item = Item.query.get(item_id)
+    if not item:
+        return jsonify({'error': 'Item not found'}), 404
+
+    data = request.get_json()
+
+    if 'name' in data:
+        item.name = data['name']
+    if 'barcode' in data:
+        item.barcode = data['barcode']
+    if 'category' in data:
+        item.category = data['category']
+    if 'quantity' in data:
+        item.quantity = data['quantity']
+    if 'price' in data:
+        item.price = data['price']
+
+    db.session.commit()
+    return jsonify(item.to_dict()), 200
